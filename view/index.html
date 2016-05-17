@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript">
+	window.onload = function () {
+
+      var dps = [{x: 0, y: 0}];   //dataPoints. 
+	cont = 1;
+      var chart = new CanvasJS.Chart("chartContainer",{
+      	title :{
+      		text: "Live Data"
+      	},
+      	axisX: {						
+      		title: "Axis X Title"
+      	},
+      	axisY: {						
+      		title: "Units"
+      	},
+      	data: [{
+      		type: "line",
+      		dataPoints : dps
+      	}]
+      });
+
+      chart.render();
+      var xVal = dps.length + 1;
+      var yVal = 15;	
+      var updateInterval = 1000;
+
+      var updateChart = function () {
+      	
+      	
+      	yVal = valor;
+      	dps.push({x: cont, y: valor});
+      	
+      	xVal++;
+      	if (dps.length >  10 )
+      	{
+      		dps.shift();				
+      	}
+
+      	chart.render();		
+	console.log('valor',valor);
+	console.log('cont', cont);
+
+	// update chart after specified time. 
+
+};
+
+setInterval(function(){updateChart()}, updateInterval); 
+}
+</script>
+<script type="text/javascript" src="js/canvasjs.min.js"></script>
+</head>
+<body>
+	<script type="text/javascript">
+		var socket = io.connect();
+		 socket.on("dadosArduino", function(dado){
+			valor = parseFloat(dado.valor);
+			cont+=1;
+		});
+	</script>
+	<div id="chartContainer" style="height: 300px; width: 100%;">
+	</div>
+
+	<br><br><span id="outputText">50</span>
+</body>
+</html>
