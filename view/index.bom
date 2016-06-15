@@ -20,18 +20,11 @@
                                 });
                                 
                                 document.getElementById('btn_enviar').onclick = function () {
-                                        var inputMensagem = '4';
+                                        var inputMensagem = document.getElementById('mensagem');
                                         
-                                        socket.emit('mensagem_servidor', inputMensagem);
-                                        console.log(inputMensagem);       
-                                        inputMensagem = '';
-                                };
-                                document.getElementById('btn_desligar').onclick = function () {
-                                        var inputMensagem1 = '3';
-                                        
-                                        socket.emit('mensagem_servidor', inputMensagem1);
-                                        console.log(inputMensagem1);       
-                                        inputMensagem1 = '';
+                                        socket.emit('mensagem_servidor', inputMensagem.value);
+                                        console.log(inputMensagem.value);       
+                                        inputMensagem.value = '';
                                 };
 
 
@@ -41,13 +34,13 @@
 	cont = 1;
       var chart = new CanvasJS.Chart("chartContainer",{
       	title :{
-      		text: "Consumo em Watts instantâneo"
+      		text: "Live Data"
       	},
       	axisX: {						
-      		title: "Tempo"
+      		title: "Axis X Title"
       	},
       	axisY: {						
-      		title: "Consumo"
+      		title: "Units"
       	},
       	data: [{
       		type: "line",
@@ -65,14 +58,15 @@
       	
       	dps.push({x: cont, y: valor});
       	
-      	if (dps.length >  100 )
+      	xVal++;
+      	if (dps.length >  10 )
       	{
       		dps.shift();				
       	}
 
       	chart.render();		
 	console.log('valor',valor);
-	//console.log('cont', cont);
+	console.log('cont', cont);
 
 	// update chart after specified time. 
 
@@ -95,12 +89,11 @@ setInterval(function(){updateChart()}, updateInterval);
 	<div id="chartContainer" style="height: 300px; width: 100%;">
 	</div>
 
+		<input type="text" id="mensagem"/>
 		
 		<br>
 		
-		<input type="button" id="btn_enviar" value="Desligar"/>
-		<br>
-		 <input type="button" id="btn_desligar" value="Ligar"/>
+		<input type="button" id="btn_enviar" value="Enviar"/>
 	
 </body>
 </html>
